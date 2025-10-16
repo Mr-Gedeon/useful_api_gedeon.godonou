@@ -5,11 +5,12 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use Validator;
 
 class RegisteredUserController extends Controller
 {
@@ -18,13 +19,21 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): Response
+    public function store(Request $request): JsonResponse
     {
-        $request->validate([
+
+        // assure that the inputs are valid
+        $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'password' => ['required', Rules\Password::defaults()],
         ]);
+
+        //sen a response error
+        if ($validator->fails()) {
+            
+            return response()->json(["error: Bad params"], 400);
+        }
 
         $user = User::create([
             'name' => $request->name,
@@ -36,6 +45,14 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return response()->noContent();
+        return response()->json(
+            [
+            "id" => $user->id,
+            "name" => $user->name,
+            "email" => $user->email,
+            "created_at" => $user->created_at->format('c:p')
+        ],
+            201
+        );
     }
 }
