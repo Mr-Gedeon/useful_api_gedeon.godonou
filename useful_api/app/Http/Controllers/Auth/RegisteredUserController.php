@@ -21,18 +21,16 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-
         // assure that the inputs are valid
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', Rules\Password::defaults()],
         ]);
 
-        //sen a response error
+        // send a response error
         if ($validator->fails()) {
-            
-            return response()->json(["error: Bad params"], 400);
+            return response()->json(['error: Bad params'], 400);
         }
 
         $user = User::create([
@@ -47,11 +45,11 @@ class RegisteredUserController extends Controller
 
         return response()->json(
             [
-            "id" => $user->id,
-            "name" => $user->name,
-            "email" => $user->email,
-            "created_at" => $user->created_at->format('c:p')
-        ],
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'created_at' => $user->created_at->format('c:p')
+            ],
             201
         );
     }
