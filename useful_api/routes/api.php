@@ -19,6 +19,9 @@ Route::prefix('/')->group(function () {
         ->middleware('guest')
         ->name('login');
 
+    Route::get('s/{code}', [ShortlinkController::class, 'redirect'])
+        ->middleware('guest');
+
 
 
     

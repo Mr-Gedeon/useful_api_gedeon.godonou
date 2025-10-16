@@ -47,7 +47,7 @@ class ShortlinkController extends Controller
                 'code' => $url->code,
                 'clicks' => $url->clicks,
                 'created_at' => $url->created_at->format('c:p'),
-            ]);
+            ], 201);
 
         } else {
             $custom_code = substr(md5(uniqid(rand(), true)), 0, 6);
@@ -67,8 +67,25 @@ class ShortlinkController extends Controller
                 'code' => $url->code,
                 'clicks' => $url->clicks,
                 'created_at' => $url->created_at->format('c:p'),
-            ]);
+            ], 201);
         }
 
+    }
+
+    public function redirect(Request $request) {
+
+        $code = $request->code;
+
+        if (preg_match('/[^\w\/\_\-]/', $code) === 1) {
+            return response()->json(status: 400);
+        }
+
+        $url = Shortlink::where('code', "=", $code)->first();
+
+        if ($url === null) {
+            return response()->json(status: 404);
+        }
+
+        return redirect($url->original_url);
     }
 }
