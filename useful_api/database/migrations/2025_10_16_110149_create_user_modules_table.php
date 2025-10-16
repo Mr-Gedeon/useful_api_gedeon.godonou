@@ -15,6 +15,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('module_id')->constrained()->cascadeOnDelete();
             $table->boolean('active');
+            $table->timestamps();
         });
     }
 
