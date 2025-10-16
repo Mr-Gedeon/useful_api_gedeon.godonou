@@ -6,7 +6,6 @@ use App\Models\Shortlink;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Validator;
-
 class ShortlinkController extends Controller
 {
     //
@@ -90,7 +89,7 @@ class ShortlinkController extends Controller
         return redirect($url->original_url);
     }
 
-    public function getLinks(Request $request) {
+    public function getLinks(Request $request): JsonResponse {
 
         $user_id = $request->user()->id;
 
@@ -120,5 +119,25 @@ class ShortlinkController extends Controller
         }
 
         return response()->json($res);
+    }
+
+    public function delete(Request $request): JsonResponse {
+
+        $user_id = $request->user()->id;
+
+        $link_id = $request->id;
+        $link = Shortlink::where('user_id', '=', $user_id)
+        ->where('id', "=", $link_id)->first();
+
+        if ($link !== null) {
+            
+            Shortlink::where('user_id', '=', $user_id)
+            ->where('id', "=", $link_id)->delete();
+
+            return response()->json(["message"=>"Link deleted successfully"], 200);
+        }
+        else {
+            return response()->json(status: 404);
+        }
     }
 }

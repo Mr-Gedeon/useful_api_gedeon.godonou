@@ -42,6 +42,7 @@ Route::prefix('/')->group(function () {
 
             Route::post('shorten', [ShortlinkController::class, 'shorten']);
             Route::get('links', [ShortlinkController::class, 'getLinks']);
+            Route::delete('links/{id}', [ShortlinkController::class, "delete"]);
         });
     });
 });
