@@ -14,7 +14,7 @@ class CheckModuleActive
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, string $module_id): Response
+    public function handle(Request $request, Closure $next, string $module): Response
     {
         /**
          * find whereas the user with the given module_id
@@ -22,7 +22,9 @@ class CheckModuleActive
          */
         $user_id = $request->user()->id;
 
-        switch ($module_id) {
+        $module_id = null;
+
+        switch ($module) {
             case 'urlModule':
                 $module_id = 1;
                 break;
@@ -47,10 +49,15 @@ class CheckModuleActive
                 $module_id = null;
                 break;
         }
+        
+        if ($module_id === null) {
+            return response()->json(['error: Module inactive. Please activate this module to use it.'], 403);
+        }
 
         $activated = UserModule::where('user_id', '=', $user_id)
             ->where('module_id', '=', $module_id)
             ->first();
+
 
         if ($activated === null) {
             return response()->json(['error: Module inactive. Please activate this module to use it.'], 403);

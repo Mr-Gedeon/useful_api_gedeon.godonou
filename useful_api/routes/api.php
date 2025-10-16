@@ -3,8 +3,8 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\ModuleController;
+use App\Http\Controllers\ShortlinkController;
 use App\Http\Middleware\CheckModuleActive;
-use App\Models\Shortlink;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -37,7 +37,7 @@ Route::prefix('/')->group(function () {
         //URL SHORTENER MODULE
         Route::middleware(CheckModuleActive::class . ':urlModule')->group(function () {
 
-            Route::get('shorten', [Shortlink::class, 'shorten']);
+            Route::post('shorten', [ShortlinkController::class, 'shorten']);
         });
     });
 });
