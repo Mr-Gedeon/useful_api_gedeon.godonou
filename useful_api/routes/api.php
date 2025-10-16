@@ -19,6 +19,8 @@ Route::post('/login', [AuthenticatedSessionController::class, 'store'])
 /* ROUTE ACCESSIBLE ONLY WITH A TOKEN */
 Route::middleware(['auth:sanctum'])->group(function () {
 
+    Route::get('/modules', [ModuleController::class, 'show']);
+
     /* activation/desactivation of modules for a user */
     Route::post('/modules/{id}/activate', [ModuleController::class, 'activate']);
     Route::post('/modules/{id}/deactivate', [ModuleController::class, 'deactivate']);

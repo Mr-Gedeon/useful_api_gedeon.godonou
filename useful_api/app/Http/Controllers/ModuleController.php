@@ -9,10 +9,27 @@ use Illuminate\Http\Request;
 class ModuleController extends Controller
 {
     
-    public function show(): JsonResponse {
+    public function show(Request $request): JsonResponse {
 
-        $modules = Module::all();
-        return response()->json([$modules]);
+        $user_id = $request->user()->id;
+
+        $activated = UserModule::where('user_id', "=", $user_id)->get();
+
+        $result = [];
+
+        if ($activated !== null) {
+            # code...
+            foreach ($activated as $key => $value) {
+                # code...
+                $result[] = Module::find($value->module_id);
+            }
+            return response()->json($result);
+        } else {
+            # code...
+            return response()->json($activated);
+        }
+        
+
     }
 
     public function activate(Request $request): JsonResponse {
