@@ -51,7 +51,7 @@ class CheckModuleActive
         }
         
         if ($module_id === null) {
-            return response()->json(['error: Module inactive. Please activate this module to use it.'], 403);
+            return response()->json(['error'=> 'Module inactive. Please activate this module to use it.'], 403);
         }
 
         $activated = UserModule::where('user_id', '=', $user_id)
@@ -60,7 +60,7 @@ class CheckModuleActive
 
 
         if ($activated === null) {
-            return response()->json(['error: Module inactive. Please activate this module to use it.'], 403);
+            return response()->json(['error' =>'Module inactive. Please activate this module to use it.'], 403);
         }
 
         return $next($request);
