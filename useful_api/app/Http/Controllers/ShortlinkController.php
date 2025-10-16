@@ -85,7 +85,40 @@ class ShortlinkController extends Controller
         if ($url === null) {
             return response()->json(status: 404);
         }
-
+        
+        Shortlink::where('code', "=", $code)->update(['clicks' => $url->clicks + 1]);
         return redirect($url->original_url);
+    }
+
+    public function getLinks(Request $request) {
+
+        $user_id = $request->user()->id;
+
+        $result = Shortlink::where('user_id', '=', $user_id)->get();
+
+        $res = [];
+
+        if ($result !== null) {
+            # code...
+            foreach ($result as $key => $value) {
+                # code...
+                $row = Shortlink::find($value->id);
+
+                $res[] = [
+                    "id" => $row->id,
+                    'user_id' => $row->user_id,
+                    'original_url' => $row->original_url,
+                    'code' => $row->code,
+                    'clicks' => $row->clicks,
+                    'created_at' => $row->created_at->format('c:p'),
+                ];
+            }
+            return response()->json($res);
+        } else {
+            # code...
+            // return response()->json($activated);
+        }
+
+        return response()->json($res);
     }
 }

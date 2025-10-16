@@ -41,6 +41,7 @@ Route::prefix('/')->group(function () {
         Route::middleware(CheckModuleActive::class . ':urlModule')->group(function () {
 
             Route::post('shorten', [ShortlinkController::class, 'shorten']);
+            Route::get('links', [ShortlinkController::class, 'getLinks']);
         });
     });
 });
