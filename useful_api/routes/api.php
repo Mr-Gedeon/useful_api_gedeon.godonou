@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Middleware\CheckModuleActive;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,4 +18,13 @@ Route::post('/login', [AuthenticatedSessionController::class, 'store'])
 /* ROUTE ACCESSIBLE ONLY WITH A TOKEN */
 Route::middleware(['auth:sanctum'])->group(function () {
 
+    /* activation/desactivation of modules for a user */
+    Route::post('/modules/{id}/activate');
+    Route::post('/modules/{id}/deactivate');
+
+    /* ROUTE ACCESSIBLE ONLY IF THE DESIRED MODULE IS ACTIVATED */
+    Route::middleware(CheckModuleActive::class)->group(function () {
+
+        Route::get('/test/{id}');
+    });
 });
