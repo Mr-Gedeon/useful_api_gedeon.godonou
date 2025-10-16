@@ -21,7 +21,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     /* activation/desactivation of modules for a user */
     Route::post('/modules/{id}/activate', [ModuleController::class, 'activate']);
-    Route::post('/modules/{id}/deactivate');
+    Route::post('/modules/{id}/deactivate', [ModuleController::class, 'deactivate']);
 
     /* ROUTE ACCESSIBLE ONLY IF THE DESIRED MODULE IS ACTIVATED */
     Route::middleware(CheckModuleActive::class)->group(function () {

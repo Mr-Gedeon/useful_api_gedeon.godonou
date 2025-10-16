@@ -53,4 +53,40 @@ class ModuleController extends Controller
 
 
     }
+
+    public function deactivate(Request $request): JsonResponse {
+
+        $module_id = $request->id;
+        
+        $user_id = $request->user()->id;
+        
+        $module = Module::find($module_id);
+
+        if ($module !== null) {
+
+            $activated = UserModule::where('user_id', "=", $user_id)
+            ->where("module_id", "=", $module_id)->first();
+
+            if ($activated !== null) {
+                # code...
+                UserModule::where('user_id', "=", $user_id)
+                ->where("module_id", "=", $module_id)->delete();
+
+                return response()->json(["message"=>"Module deactivated"], 200);
+
+            } else {
+                # code...
+
+                return response()->json(["message"=>"Module not activated"], 200);
+            }
+            
+            
+
+        } else {
+            # code...
+            return response()->json(status:404);
+        }
+
+
+    }
 }
