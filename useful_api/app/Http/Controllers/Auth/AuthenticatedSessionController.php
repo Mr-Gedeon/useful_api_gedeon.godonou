@@ -27,7 +27,7 @@ class AuthenticatedSessionController extends Controller
         // assure that the inputs are valid
         $validator = Validator::make($request->all(), [
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255'],
-            'password' => ['required', Rules\Password::defaults()],
+            'password' => ['required', Rules\Password::defaults(), 'min:8'],
         ]);
 
         // send a response error

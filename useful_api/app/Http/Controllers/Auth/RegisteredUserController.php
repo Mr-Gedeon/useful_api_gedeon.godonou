@@ -25,7 +25,7 @@ class RegisteredUserController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
-            'password' => ['required', Rules\Password::defaults()],
+            'password' => ['required', Rules\Password::defaults(), 'min:8'],
         ]);
 
         // send a response error
