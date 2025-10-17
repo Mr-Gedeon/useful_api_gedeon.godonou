@@ -9,7 +9,9 @@ export const useAuthStore = defineStore('auth', {
         {
             user: null,
             user_id: null,
-            token: null
+            token: null,
+            login_success: null,
+            login_error: null
         }
     ),
 
@@ -38,14 +40,21 @@ export const useAuthStore = defineStore('auth', {
                         'Content-Type': 'application/json'
                     }
                 })
+                this.login_success = "Login successfuly! Redirecting..."
 
                 console.log(query.data)
                 this.token = await query.data.token
                 this.user_id = await query.data.user_id
 
+
+                return true
+
             } catch (error) {
 
+                this.login_error = "Something went wrong! retry"
                 console.error(error)
+
+                return false
             }
 
 
