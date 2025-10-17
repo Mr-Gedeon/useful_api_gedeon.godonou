@@ -1,3 +1,20 @@
+<script setup>
+import { useAuthStore } from '@/stores/authStore';
+import { useRouter } from 'vue-router'
+import { onMounted } from 'vue';
+
+const authStore = useAuthStore()
+const router = useRouter()
+
+onMounted(async ()=>{
+    if (authStore.isUserConnected() === false) {
+        router.push({name: 'Login'})
+    }
+})
+
+
+</script>
+
 <template>
 
     <button data-drawer-target="default-sidebar" data-drawer-toggle="default-sidebar" aria-controls="default-sidebar"
