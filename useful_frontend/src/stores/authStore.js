@@ -11,7 +11,9 @@ export const useAuthStore = defineStore('auth', {
             user_id: null,
             token: null,
             login_success: null,
-            login_error: null
+            register_success: null,
+            login_error: null,
+            register_error: null
         }
     ),
 
@@ -21,6 +23,39 @@ export const useAuthStore = defineStore('auth', {
 
                 return true
             } else {
+                return false
+            }
+        },
+
+        async register(Newname, Newemail, Newpassword) {
+
+            const UserName = Newname.trim()
+            const UserEmail = Newemail.trim()
+            const UserPassword = Newpassword.trim()
+
+            try {
+                const query = await axios.post(apiUrl + 'register', {
+                    name: UserName,
+                    email: UserEmail,
+                    password: UserPassword
+                }, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                this.register_success = "Welcome! Redirecting..."
+
+                // console.log(query.data)
+                this.user = await query.data
+
+
+                return true
+
+            } catch (error) {
+
+                this.register_error = "Something went wrong! retry"
+                console.error(error)
+
                 return false
             }
         },
@@ -42,7 +77,7 @@ export const useAuthStore = defineStore('auth', {
                 })
                 this.login_success = "Login successfuly! Redirecting..."
 
-                console.log(query.data)
+                // console.log(query.data)
                 this.token = await query.data.token
                 this.user_id = await query.data.user_id
 

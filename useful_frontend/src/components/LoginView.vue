@@ -31,6 +31,13 @@
             Submit
         </button>
         <div class="mt-[20px]">
+            <div class="w-full text-center">
+
+                <p>Don't have an account?</p>
+                <router-link to="Register" class="text-blue-700">
+                  Register
+                </router-link>
+            </div>
             <span v-if="authStore.login_success !== null" class="text-green-600">{{ authStore.login_success }}</span>
             <span v-if="authStore.login_error !== null" class="text-red-600">{{ authStore.login_error }}</span>
         </div>
